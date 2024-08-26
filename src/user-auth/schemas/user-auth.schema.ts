@@ -14,6 +14,18 @@ export class User {
   lastName: string;
   @Prop({type: Types.ObjectId, ref: 'Role'})
   role: Role;
+  @Prop()
+  dayStart: string;
+  @Prop()
+  dayEnd: string;
+  @Prop()
+  lunchStart: string;
+  @Prop()
+  lunchEnd: string;
+  @Prop()
+  slotDuration: number;
+  @Prop()
+  timezone: string;
 }
 
 export type UserDocument = User & Document;

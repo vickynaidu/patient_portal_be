@@ -26,10 +26,17 @@ export class UserAuthController {
   @Post('login')
   @ApiOperation({summary: 'Login User' })
   @ApiResponse({ status: 200, description: 'Success' })
-  async loginUser(@Body() body: LoginDto): Promise<{ message: string; token: string }> {
+  async loginUser(@Body() body: LoginDto): Promise<{ message: string; authToken: string, refreshToken: string }> {
     const { email, password } = body;
-    const token = await this.userAuthService.loginUser(email, password);
-    return { message: 'Login successful', token };
+    const {authToken, refreshToken} = await this.userAuthService.loginUser(email, password);
+    return { message: 'Login successful', authToken, refreshToken };
+  }
+
+  @Post('refresh')
+  async refresh(@Req() request: Request): Promise<{ message: string; authToken: string, refreshToken: string }> {
+    console.log("request: ", request["user"]["userId"]);
+    const {authToken, refreshToken} = await this.userAuthService.refreshTokens(request["user"]["userId"]);
+    return { message: 'Refreshed tokens', authToken, refreshToken };
   }
 
   @Get('users')

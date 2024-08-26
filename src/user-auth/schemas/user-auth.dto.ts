@@ -26,4 +26,34 @@ export class UserDto {
     description: 'This is required',
   })
   role: string;
+  @ApiProperty({
+    type: String,
+    description: 'This is required',
+  })
+  dayStart: string;
+  @ApiProperty({
+    type: String,
+    description: 'This is required',
+  })
+  dayEnd: string;
+  @ApiProperty({
+    type: String,
+    description: 'This is required',
+  })
+  lunchStart: string;
+  @ApiProperty({
+    type: String,
+    description: 'This is required',
+  })
+  lunchEnd: string;
+  @ApiProperty({
+    type: Number,
+    description: 'This is required',
+  })
+  slotDuration: number;
+  @ApiProperty({
+    type: String,
+    description: 'This is required',
+  })
+  timezone: string;
 }

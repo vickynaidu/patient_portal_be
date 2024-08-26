@@ -12,7 +12,12 @@ export class SessionDto {
     type: Date,
     description: 'This is required',
   })
-  session_time: Date;
+  session_date: Date;
+  @ApiPropertyOptional({
+    type: String,
+    description: 'This is required',
+  })
+  session_time: string;
   @ApiProperty({
     type: String,
     description: 'This is required',
@@ -32,5 +37,5 @@ export class SessionDto {
     type: String,
     description: 'This is required',
   })
-  status: string;
+  is_completed: string;
 }

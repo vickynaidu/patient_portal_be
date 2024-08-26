@@ -1,4 +1,4 @@
-import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
+import { Module, NestModule, MiddlewareConsumer, forwardRef } from '@nestjs/common';
 import { SessionController } from './session.controller';
 import { SessionService } from './session.service';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -8,6 +8,7 @@ import { MeetingNotes, MeetingNotesSchema } from './schemas/meeting_notes.schema
 import { JwtModule } from '@nestjs/jwt';
 import { secretKey } from 'src/user-auth/config';
 import { UserAuthModule } from 'src/user-auth/user-auth.module';
+import { DoctorModule } from 'src/doctors/doctor.module';
 @Module({
   imports: [
     MongooseModule.forFeature([
@@ -19,7 +20,8 @@ import { UserAuthModule } from 'src/user-auth/user-auth.module';
       secret: secretKey.secret,
       signOptions: { expiresIn: '1h' }, 
     }),
-    UserAuthModule
+    DoctorModule,
+    forwardRef(() => UserAuthModule),
   ],
   controllers: [SessionController],
   providers: [SessionService]

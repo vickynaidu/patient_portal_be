@@ -8,6 +8,7 @@ export class Doctor {
   doctor: User;
   @Prop()
   specialization: string;
+  @Prop()
   start_year: number;
   
 }

@@ -5,6 +5,7 @@ import { Request } from 'express';
 import { DoctorService } from './doctor.service';
 import { DoctorDto } from './schemas/doctor.dto';
 import { Doctor } from './schemas/doctor.schema';
+import { DoctorAppointments } from './schemas/doctor-appointments.schema';
 
 @ApiTags('Doctor specializations')
 @Controller('')
@@ -16,10 +17,9 @@ export class DoctorController {
   @Post('specialization')
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
-  async createDoctor(@Body() body: DoctorDto): Promise<{ message: string }> {
-    console.log("Body: ", body);
-    await this.doctorService.createSpecialization(body);
-    return { message: 'User registered successfully' };
+  async createDoctor(@Req() request: Request, @Body() body: DoctorDto): Promise<{ message: string }> {
+    const message = await this.doctorService.createSpecialization(request['user']["userId"], body);
+    return message;
   }
 
   @Put('specialization')
@@ -35,18 +35,37 @@ export class DoctorController {
   @Get('doctor')
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
-  async getDoctorSpecializations(@Req() request: Request): Promise<Doctor> {
+  async getDoctorSpecializations(@Req() request: Request): Promise<Doctor[]> {
     console.log("request: ", request["user"]["userId"]);
-    const doctors = this.doctorService.getSpecialization(request['user']["userId"]);
-    return doctors;
+    const specializations = this.doctorService.getSpecialization(request['user']["userId"]);
+    return specializations;
   }
 
-  @Get('doctor/search')
+  @Get('doctor/search/:spec')
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
   @ApiParam({ name: 'specialization', required: true, description: 'Doctor Specialization' })
-  getDoctorsBySpecialization(@Param('id') specialization?: string[]): Promise<Doctor[]> {
+  getDoctorsBySpecialization(@Param('spec') specialization?: string): Promise<Doctor[]> {
     console.log("request: ", specialization);
     return this.doctorService.getSpecializations(specialization);
+  }
+
+  @Get('doctor/appointments/:id/:date')
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  @ApiParam({ name: 'id', required: true, description: 'Doctor ID' })
+  @ApiParam({ name: 'date', required: true, description: 'Date' })
+  getDoctorAppointments(@Param('id') id?: string, @Param('date') date?: string): Promise<string[]> {
+    console.log("request: ", id, date);
+    return this.doctorService.getAppointments(id, date);
+  }
+
+  @Get('doctor/id')
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  async getDoctorSpecializationsById(@Req() request: Request): Promise<Doctor> {
+    console.log("request: ", request["user"]["userId"]);
+    const specialization = this.doctorService.getSpecializationById(request['user']["userId"]);
+    return specialization;
   }
 }

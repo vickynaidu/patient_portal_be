@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { MetricsInterceptor } from './metrics/metrics.interceptor';
+import { CustomIoAdapter } from './CustomIoAdapter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -22,7 +23,16 @@ async function bootstrap() {
     swaggerOptions: { defaultModelsExpandDepth: -1 },
   });
 
-  app.enableCors();
+  // Apply the custom WebSocket adapter
+  app.useWebSocketAdapter(new CustomIoAdapter(app));
+
+  // Enable CORS for HTTP requests
+  app.enableCors({
+    origin: '*', // Replace with your frontend origin
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+  });
+
   await app.listen(5000);
 }
 

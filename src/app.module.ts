@@ -9,6 +9,8 @@ import { SessionModule } from './sessions/session.module';
 import { RoleModule } from './roles/role.module';
 import { SeedModule } from './seed/seed.module';
 import { DoctorModule } from './doctors/doctor.module';
+import { ChatModule } from './messaging/chat.module';
+import { RoomsModule } from './rooms/rooms.module';
 
 @Module({
   imports: [
@@ -22,6 +24,8 @@ import { DoctorModule } from './doctors/doctor.module';
     SessionModule,
     MongooseModule.forRoot(process.env.MONGO_URI),
     UserAuthModule,
+    ChatModule,
+    RoomsModule
   ],
   controllers: [AppController, MetricsController],
   providers: [AppService],

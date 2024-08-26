@@ -16,9 +16,10 @@ export class SessionController {
   @Post('session')
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
-  async createSession(@Body() body: SessionDto): Promise<{ message: string }> {
-    console.log("Body: ", body);
-    await this.sessionService.createSession(body);
+  async createSession(@Body() body: SessionDto, @Req() request: Request): Promise<{ message: string }> {
+    const _id = request["user"]["userId"];
+    console.log("Body: ", body, _id);
+    await this.sessionService.createSession(body, _id);
     return { message: 'User registered successfully' };
   }
 

@@ -6,10 +6,12 @@ import { secretKey } from 'src/user-auth/config';
 import { UserAuthModule } from 'src/user-auth/user-auth.module';
 import { Doctor, DoctorSchema } from './schemas/doctor.schema';
 import { DoctorService } from './doctor.service';
+import { DoctorAppointments, DoctorAppointmentsSchema } from './schemas/doctor-appointments.schema';
 @Module({
   imports: [
     MongooseModule.forFeature([
-      { name: Doctor.name, schema: DoctorSchema }
+      { name: Doctor.name, schema: DoctorSchema },
+      { name: DoctorAppointments.name, schema: DoctorAppointmentsSchema },
     ]),
     JwtModule.register({
       secret: secretKey.secret,
@@ -18,7 +20,8 @@ import { DoctorService } from './doctor.service';
     UserAuthModule
   ],
   controllers: [DoctorController],
-  providers: [DoctorService]
+  providers: [DoctorService],
+  exports: [DoctorService],
 })
 
 export class DoctorModule implements NestModule {

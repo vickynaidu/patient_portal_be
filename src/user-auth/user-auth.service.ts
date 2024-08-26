@@ -31,7 +31,7 @@ export class UserAuthService {
       throw new Error('An error occurred while registering the user');
     }
  }
-  async loginUser(email: string, password: string): Promise<string> {
+  async loginUser(email: string, password: string): Promise<{authToken: string, refreshToken: string}> {
     try {
       const user = await this.userModel.findOne({ email });
       if (!user) {
@@ -43,8 +43,29 @@ export class UserAuthService {
         throw new UnauthorizedException('Invalid login credentials');
       }
       const payload = { userId: user._id };
-      const token = this.jwtService.sign(payload); 
-      return token;
+      const authToken = this.jwtService.sign(payload); 
+      const refreshToken = this.jwtService.sign(payload, {
+        expiresIn: '1d',
+        secret: 'another-secret-key', // Use a different secret key if desired
+      });
+      return {authToken, refreshToken};
+    } catch (error) {
+      console.log(error.response.message);
+      throw new UnauthorizedException(error?.response?.message || 'An error occurred while logging in');
+    }
+  }
+  async refreshTokens(_id: string) {
+    try {
+      const user = await this.userModel.findOne({ _id });
+      if (!user) {
+        throw new NotFoundException('User not found');
+      }
+      const payload = { userId: user._id };
+      const authToken = this.jwtService.sign(payload); 
+      const refreshToken = this.jwtService.sign(payload, {
+        expiresIn: '1d'
+      });
+      return {authToken, refreshToken};
     } catch (error) {
       console.log(error.response.message);
       throw new UnauthorizedException(error?.response?.message || 'An error occurred while logging in');

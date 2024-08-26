@@ -32,6 +32,10 @@
 $ npm install
 ```
 
+## Data
+Please make sure the DB URL is correct in .env file before running the application.
+On first run the the default user data and Roles will be seeded into the DB.
+
 ## Running the app
 
 ```bash
@@ -57,6 +61,9 @@ $ npm run test:e2e
 # test coverage
 $ npm run test:cov
 ```
+
+## API documentation
+Use http://location:5000/doc for API documentation
 
 ## Support
 

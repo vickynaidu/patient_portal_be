@@ -58,7 +58,13 @@ export class SeedService implements OnModuleInit {
         console.log("Default Admin user already exist...!");
       } else {
         // this method creates new user in database
-        const user = await this.userService.registerUser(email, 'admin', 'Portal', 'Admin', 'Admin');
+        const user = await this.userService.registerUser({
+          email,
+          password: 'admin',
+          firstName: 'Portal',
+          lastName: 'Admin',
+          role: 'Admin'
+        });
         console.log(user);        
       }
       console.log("Intial data seeding completed...!");

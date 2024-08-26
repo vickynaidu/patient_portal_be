@@ -16,10 +16,7 @@ export class UserAuthController {
   @ApiResponse({ status: 200, description: 'Success' })
   @Post('register')
   async registerUser(@Body() body: UserDto): Promise<{ message: string }> {
-    console.log("Body: ", body);
-    const { email, password, firstName, lastName, role } = body;
-    console.log(email, password, firstName, lastName, role);
-    await this.userAuthService.registerUser(email, password, firstName, lastName, role);
+    await this.userAuthService.registerUser(body);
     return { message: 'User registered successfully' };
   }
 

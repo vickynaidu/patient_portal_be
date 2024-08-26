@@ -19,13 +19,13 @@ export class UserAuthService {
     @Inject(RoleService) private readonly roleService: RoleService
   ) {}
   
-  async registerUser(email: string, password: string, firstName: string, lastName: string, role: string): Promise<{ message: string }> {
+  async registerUser(data): Promise<{ message: string }> {
     try {
-      console.log(email, password, firstName, lastName, role);
-      const roleObj = await this.roleService.getRoleByName(role);
-      console.log("DB ",role ," object", roleObj);
-      const hash = await bcrypt.hash(password, 10);
-      await this.userModel.create({ email, password: hash, firstName, lastName, role: roleObj});
+      console.log("register user: ", data);
+      const roleObj = await this.roleService.getRoleByName(data.role);
+      const hash = await bcrypt.hash(data.password, 10);
+      data.role = roleObj;
+      await this.userModel.create(data);
       return { message: 'User registered successfully' };
     } catch (error) {
       console.log("Error: ", error);

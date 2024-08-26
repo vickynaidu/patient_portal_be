@@ -1,3 +1,5 @@
-export  const secretKey = {
-    secret: ' SECTRET VALUE',
-  };
+export const secret = {
+  secret: ' SECTRET VALUE',
+  authTokenExp: "30m",
+  refreshTokenExp: "24h"
+};

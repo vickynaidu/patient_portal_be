@@ -6,7 +6,7 @@ import { Session, SessionSchema } from './schemas/session.schema';
 import { Prescription, PrescriptionSchema } from './schemas/prescription.schema';
 import { MeetingNotes, MeetingNotesSchema } from './schemas/meeting_notes.schema';
 import { JwtModule } from '@nestjs/jwt';
-import { secretKey } from 'src/user-auth/config';
+import { secret } from 'src/user-auth/config';
 import { UserAuthModule } from 'src/user-auth/user-auth.module';
 import { DoctorModule } from 'src/doctors/doctor.module';
 @Module({
@@ -17,8 +17,8 @@ import { DoctorModule } from 'src/doctors/doctor.module';
       { name: MeetingNotes.name, schema: MeetingNotesSchema },
     ]),
     JwtModule.register({
-      secret: secretKey.secret,
-      signOptions: { expiresIn: '1h' }, 
+      secret: secret.secret,
+      signOptions: { expiresIn: secret.authTokenExp },  
     }),
     DoctorModule,
     forwardRef(() => UserAuthModule),

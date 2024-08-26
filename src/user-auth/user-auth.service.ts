@@ -6,6 +6,7 @@ import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { Role } from 'src/roles/schemas/role.schema';
 import { RoleService } from 'src/roles/role.service';
+import { secret } from './config';
 
 
 @Injectable()
@@ -45,8 +46,8 @@ export class UserAuthService {
       const payload = { userId: user._id };
       const authToken = this.jwtService.sign(payload); 
       const refreshToken = this.jwtService.sign(payload, {
-        expiresIn: '1d',
-        secret: 'another-secret-key', // Use a different secret key if desired
+        expiresIn: secret.refreshTokenExp,
+        secret: secret.secret, // Use a different secret key if desired
       });
       return {authToken, refreshToken};
     } catch (error) {
@@ -54,7 +55,7 @@ export class UserAuthService {
       throw new UnauthorizedException(error?.response?.message || 'An error occurred while logging in');
     }
   }
-  async refreshTokens(_id: string) {
+  async refreshTokens(_id: string, refresh_token: string) {
     try {
       const user = await this.userModel.findOne({ _id });
       if (!user) {
@@ -63,7 +64,7 @@ export class UserAuthService {
       const payload = { userId: user._id };
       const authToken = this.jwtService.sign(payload); 
       const refreshToken = this.jwtService.sign(payload, {
-        expiresIn: '1d'
+        expiresIn: secret.refreshTokenExp
       });
       return {authToken, refreshToken};
     } catch (error) {

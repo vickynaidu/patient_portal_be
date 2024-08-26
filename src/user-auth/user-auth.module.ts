@@ -4,15 +4,15 @@ import { UserAuthController } from './user-auth.controller';
 import { UserAuthService } from './user-auth.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UserSchema } from './schemas/user-auth.schema';
-import { secretKey } from './config'; 
+import { secret } from './config'; 
 import { RoleService } from 'src/roles/role.service';
 import { RoleModule } from 'src/roles/role.module';
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: 'User', schema: UserSchema }]),
     JwtModule.register({
-      secret: secretKey.secret,
-      signOptions: { expiresIn: '1h' }, 
+      secret: secret.secret,
+      signOptions: { expiresIn: secret.authTokenExp }, 
     }),
     RoleModule
   ],

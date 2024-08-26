@@ -2,7 +2,7 @@ import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
 import { DoctorController } from './doctor.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { JwtModule } from '@nestjs/jwt';
-import { secretKey } from 'src/user-auth/config';
+import { secret } from 'src/user-auth/config';
 import { UserAuthModule } from 'src/user-auth/user-auth.module';
 import { Doctor, DoctorSchema } from './schemas/doctor.schema';
 import { DoctorService } from './doctor.service';
@@ -14,8 +14,8 @@ import { DoctorAppointments, DoctorAppointmentsSchema } from './schemas/doctor-a
       { name: DoctorAppointments.name, schema: DoctorAppointmentsSchema },
     ]),
     JwtModule.register({
-      secret: secretKey.secret,
-      signOptions: { expiresIn: '1h' }, 
+      secret: secret.secret,
+      signOptions: { expiresIn: secret.authTokenExp }, 
     }),
     UserAuthModule
   ],

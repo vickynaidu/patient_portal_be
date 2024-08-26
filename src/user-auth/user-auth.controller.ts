@@ -32,10 +32,11 @@ export class UserAuthController {
     return { message: 'Login successful', authToken, refreshToken };
   }
 
+  @UseGuards(AuthGuard)
   @Post('refresh')
-  async refresh(@Req() request: Request): Promise<{ message: string; authToken: string, refreshToken: string }> {
-    console.log("request: ", request["user"]["userId"]);
-    const {authToken, refreshToken} = await this.userAuthService.refreshTokens(request["user"]["userId"]);
+  async refresh(@Body() body: {refresh_token: string}, @Req() request: Request): Promise<{ message: string; authToken: string, refreshToken: string }> {
+    console.log("request: ", request["user"]["userId"], body.refresh_token);
+    const {authToken, refreshToken} = await this.userAuthService.refreshTokens(request["user"]["userId"], body.refresh_token);
     return { message: 'Refreshed tokens', authToken, refreshToken };
   }
 

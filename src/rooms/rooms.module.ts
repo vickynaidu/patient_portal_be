@@ -5,14 +5,14 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { Room, RoomSchema } from './schemas/room.schemas';
 import { ChatModule } from 'src/messaging/chat.module';
 import { JwtModule } from '@nestjs/jwt';
-import { secretKey } from 'src/user-auth/config';
+import { secret } from 'src/user-auth/config';
 
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: Room.name, schema: RoomSchema }]),
     JwtModule.register({
-      secret: secretKey.secret,
-      signOptions: { expiresIn: '1h' },
+      secret: secret.secret,
+      signOptions: { expiresIn: secret.authTokenExp }, 
     }),
     ChatModule,
   ],
